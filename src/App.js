@@ -6,7 +6,7 @@ import Dashboard from "./scenes/dashboard";
 import Users from "./scenes/team/Users";
 import Professionals from "./scenes/team/Professionals";
 import Invoices from "./scenes/invoices";
-import Contacts from "./scenes/contacts";
+// import Contacts from "./scenes/contacts";
 import Bar from "./scenes/bar";
 import Form from "./scenes/form";
 import Line from "./scenes/line";
@@ -16,11 +16,14 @@ import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
-import { DataUsageSharp } from "@mui/icons-material";
+// import { DataUsageSharp } from "@mui/icons-material";
 import Specialities from "./scenes/team/Specialities";
 import Queries from "./scenes/team/Queries";
+import Login from "./registerLogin/Login";
+
 
 function App() {
+  const [currentForm, setCUrrentForm] = useState()
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
 
@@ -33,7 +36,8 @@ function App() {
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Dashboard />} />
               <Route path="/users" element={<Users />} />
               <Route path="/professionals" element={<Professionals />} />
               <Route path="/specialities" element={<Specialities />} />
