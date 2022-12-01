@@ -86,13 +86,16 @@ function Login() {
     console.log("entre al handle form");
     try {
       if (values) {
+
+
+
         // const response = await axios.post("http://localhost:3001/api/auth/register", values)
         const response = await axios.post("http://localhost:3001/api/auth/login", values)
         setDatos(response.data)
         console.log('====================================');
         console.log(response);
         console.log('====================================');
-        return response + navigate("/dash")
+        return response + navigate("/home")
       } else {
         alert("User not registered, please refer to the admin of Pro-FY")
       }

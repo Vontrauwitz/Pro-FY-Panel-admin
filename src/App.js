@@ -16,6 +16,7 @@ import Specialities from "./scenes/team/Specialities";
 import Queries from "./scenes/team/Queries";
 import Login from "./registerLogin/Login";
 import SpecialityForm from "./scenes/SpecialtiesForm"
+import Form from './scenes/form/index';
 
 function App() {
   const [currentForm, setCUrrentForm] = useState()
@@ -42,6 +43,8 @@ function App() {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/geography" element={<Geography />} />
               <Route path='/specialtiesform' element={<SpecialityForm />} />
+              <Route path='/form' element={<Form />} />
+
             </Routes>
           </main>
         </div>

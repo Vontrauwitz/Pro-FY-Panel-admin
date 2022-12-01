@@ -15,7 +15,7 @@ const Form = () => {
   const handleFormSubmit = async (values) => {
     console.log("entre al handle form");
     try {
-      if (values) {
+      if (!values) {
         //!! este no funciona urge
         return alert("Admin/Manager NOT CREATED please check your data!!") + window.location.reload();
       } else {
