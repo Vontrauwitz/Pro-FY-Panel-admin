@@ -1,4 +1,5 @@
-import { Box, Typography, useTheme } from "@mui/material";
+/* eslint-disable no-unused-vars */
+import { Box, Typography, useTheme, Button } from "@mui/material";
 import { tokens } from "../../theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
@@ -6,7 +7,14 @@ import React, { useState, useEffect } from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import axios from "axios"
 
+
+
+const permaDelete = async (id) => {
+  const dataDelete = await axios.delete(`http://localhost:3001/api/users/perma/${id}`)
+  window.location.reload()
+}
 
 
 
@@ -19,8 +27,20 @@ const columns = [
   { field: 'country', headerName: 'country' },
   { field: 'state', headerName: 'state' },
   { field: 'city', headerName: 'city' },
-  { field: 'image', headerName: 'Imagen', width: 600 }
-
+  { field: 'image', headerName: 'Imagen' },
+  {
+    field: "delete", headerName: 'id', width: 400, renderCell: (params) => {
+      console.log(params)
+      return (
+        <Button
+          onClick={() => permaDelete(params.id)}
+          variant="contained"
+        >
+          Delete
+        </Button>
+      );
+    }
+  }
 
 ]
 
@@ -37,132 +57,6 @@ const Users = () => {
       .then((data) => setUsers(data.data))
 
   }, [])
-
-
-  // const columns = [
-  //   { field: "id", headerName: "ID" },
-  //   {
-  //     field: "first_name",
-  //     headerName: "Nombre(s)",
-  //     flex: 1,
-  //     cellClassName: "name-column--cell",
-  //   },
-  //   {
-  //     field: "first_name",
-  //     headerName: "apellido(s)",
-  //     type: "number",
-  //     headerAlign: "left",
-  //     align: "left",
-  //   },
-  //   {
-  //     field: "email",
-  //     headerName: "Email",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "DNI",
-  //     headerName: "Dni",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "country",
-  //     headerName: "Pais",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "state",
-  //     headerName: "Estado",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "city",
-  //     headerName: "Ciudad",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "address",
-  //     headerName: "Dirección",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "postcode",
-  //     headerName: "C.P.",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "image",
-  //     headerName: "Imagen",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "favorites",
-  //     headerName: "Fav",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "roles",
-  //     headerName: "Access Level",
-  //     flex: 1,
-  //     renderCell: ({ row: { access } }) => {
-  //       return (
-  //         <Box
-  //           width="60%"
-  //           m="0 auto"
-  //           p="5px"
-  //           display="flex"
-  //           justifyContent="center"
-  //           backgroundColor={
-  //             access === "admin"
-  //               ? colors.greenAccent[600]
-  //               : access === "manager"
-  //                 ? colors.greenAccent[700]
-  //                 : colors.greenAccent[700]
-  //           }
-  //           borderRadius="4px"
-  //         >
-  //           {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-  //           {access === "manager" && <SecurityOutlinedIcon />}
-  //           {access === "user" && <LockOpenOutlinedIcon />}
-  //           <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-  //             {access}
-  //           </Typography>
-  //         </Box>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     field: "plan",
-  //     headerName: "plan",
-  //     flex: 1,
-  //     renderCell: ({ row: { plan } }) => {
-  //       return (
-  //         <Box
-  //           width="60%"
-  //           m="0 auto"
-  //           p="5px"
-  //           display="flex"
-  //           justifyContent="center"
-  //           backgroundColor={
-  //             plan === "admin"// cambiar cosas para que funcione
-  //               ? colors.greenAccent[600]
-  //               : plan === "manager"
-  //                 ? colors.greenAccent[700]
-  //                 : colors.greenAccent[700]
-  //           }
-  //           borderRadius="4px"
-  //         >
-  //           {plan === "admin" && <AdminPanelSettingsOutlinedIcon />}
-  //           {plan === "manager" && <SecurityOutlinedIcon />}
-  //           {plan === "user" && <LockOpenOutlinedIcon />}
-  //           <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-  //             {plan}
-  //           </Typography>
-  //         </Box>
-  //       );
-  //     },
-  //   },
-  // ];
-
 
   const rawData = Users?.map(e => {
     return {
@@ -182,6 +76,9 @@ const Users = () => {
   return (
     <Box m="20px">
       <Header title="Users" subtitle="Managing the Users" />
+      <Box>
+        <Button>hola</Button>
+      </Box>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -211,6 +108,7 @@ const Users = () => {
           },
         }}
       >
+        <Button>hola</Button>
         <DataGrid checkboxSelection rows={rawData}
           columns={columns}
           getRowId={(row) => row._id}

@@ -1,4 +1,5 @@
-import { Box, Typography, useTheme } from "@mui/material";
+/* eslint-disable no-unused-vars */
+import { Box, Typography, useTheme, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import React, { useState, useEffect } from 'react'
@@ -7,7 +8,17 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import axios from "axios"
+import BanButton from "../../components/BanButton";
 
+
+
+
+const permaDelete = async (id) => {
+  const dataDelete = await axios.delete(`http://localhost:3001/api/professionals/perma/${id}`)
+  window.location.reload()
+
+}
 
 const columns = [
   { field: '_id', headerName: 'ID' },
@@ -25,151 +36,89 @@ const columns = [
   { field: 'city', headerName: 'city' },
   { field: 'zip', headerName: 'C.P.' },
   { field: 'deleted', headerName: 'C.deleted.' },
-  { field: 'image', headerName: 'Imagen' }
+  { field: 'image', headerName: 'Imagen' },
+  {
+    field: "delete", headerName: 'For ever and ever', width: 400, renderCell: (params) => {
+      // console.log(params)
+      return (
+        <Button
+          onClick={() => permaDelete(params.id)}
+          variant="contained"
+        >
+          Delete
+        </Button>
+      );
+    }
+  },
+
+  {
+    field: "ban", headerName: 'ban', width: 400, renderCell: (params) => {
+
+
+      console.log(params)
+      return (
+
+        <BanButton id={params.id} />
+
+
+      );
+    }
+  }
 
 ]
 
 const Professionals = () => {
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [Pro, setPro] = useState([])
 
 
-  useEffect(() => {
-    fetch("https://api-pro-fy-production.up.railway.app/api/professionals")
-      .then((data) => data.json())
-      .then((data) => setPro(data.data))
+  // useEffect(() => {
+  //   // fetch("https://api-pro-fy-production.up.railway.app/api/professionals")
+  //   fetch("http://localhost:3001/api/professionals/ban")
 
+  //     .then((data) => data.json())
+  //     .then((data) => setPro(data.data))
+
+  // }, [])
+
+  useEffect(() => {
+    // fetch("https://api-pro-fy-production.up.railway.app/api/professionals")
+    const prof = async () => {
+
+      const api = await axios.get('https://api-pro-fy-production.up.railway.app/api/professionals')
+      const data = api.data.data
+      // console.log(dataDelete);
+      // await setPro(dataDelete.data.data)
+      const ban = await axios.get('http://localhost:3001/api/professionals/ban')
+      console.log(ban)
+      const data2 = ban.data
+      const total = data.concat(data2)
+      console.log(total)
+      // console.log(dataDelete);
+      await setPro(total)
+
+    }
+    prof()
   }, [])
 
+  // useEffect(() => {
+  //   // fetch("https://api-pro-fy-production.up.railway.app/api/professionals")
+
+  //   fetch("https://api-pro-fy-production.up.railway.app/api/professionals")
+  //     .then((data) => data.json())
+  //     .then((data) => setPro(data.data))
+  //   fetch("http://localhost:3001/api/professionals/ban")
+
+  //     .then((data) => data.json())
+  //     .then((data) => setPro(data))
+  // }, [])
 
 
-  // const columns = [
-  //   { field: "id", headerName: "ID" },
-  //   {
-  //     field: "first_name",
-  //     headerName: "Nombre(s)",
-  //     flex: 1,
-  //     cellClassName: "name-column--cell",
-  //   },
-  //   {
-  //     field: "last_name",
-  //     headerName: "apellido(s)",
-  //     type: "number",
-  //     headerAlign: "left",
-  //     align: "left",
-  //   },
-  //   {
-  //     field: "email",
-  //     headerName: "Email",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "DNI",
-  //     headerName: "Dni",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "country",
-  //     headerName: "Pais",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "state",
-  //     headerName: "Estado",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "city",
-  //     headerName: "Ciudad",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "address",
-  //     headerName: "Dirección",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "postcode",
-  //     headerName: "Codigo Postal",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "image",
-  //     headerName: "cloudinary",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "favorites",
-  //     headerName: "Fav",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "roles",
-  //     headerName: "Access Level",
-  //     flex: 1,
-  //     renderCell: ({ row: { access } }) => {
-  //       return (
-  //         <Box
-  //           width="60%"
-  //           m="0 auto"
-  //           p="5px"
-  //           display="flex"
-  //           justifyContent="center"
-  //           backgroundColor={
-  //             access === "admin"
-  //               ? colors.greenAccent[600]
-  //               : access === "manager"
-  //                 ? colors.greenAccent[700]
-  //                 : colors.greenAccent[700]
-  //           }
-  //           borderRadius="4px"
-  //         >
-  //           {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-  //           {access === "manager" && <SecurityOutlinedIcon />}
-  //           {access === "user" && <LockOpenOutlinedIcon />}
-  //           <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-  //             {access}
-  //           </Typography>
-  //         </Box>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     field: "plan",
-  //     headerName: "plan",
-  //     flex: 1,
-  //     renderCell: ({ row: { plan } }) => {
-  //       return (
-  //         <Box
-  //           width="60%"
-  //           m="0 auto"
-  //           p="5px"
-  //           display="flex"
-  //           justifyContent="center"
-  //           backgroundColor={
-  //             plan === "admin"// cambiar cosas para que funcione
-  //               ? colors.greenAccent[600]
-  //               : plan === "manager"
-  //                 ? colors.greenAccent[700]
-  //                 : colors.greenAccent[700]
-  //           }
-  //           borderRadius="4px"
-  //         >
-  //           {plan === "admin" && <AdminPanelSettingsOutlinedIcon />}
-  //           {plan === "manager" && <SecurityOutlinedIcon />}
-  //           {plan === "user" && <LockOpenOutlinedIcon />}
-  //           <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-  //             {plan}
-  //           </Typography>
-  //         </Box>
-  //       );
-  //     },
-  //   },
-  // ];
-
-
+  // console.log(
+  //   Pro);
   const rawData = Pro?.map(e => {
     return {
       _id: e?._id,
@@ -179,8 +128,8 @@ const Professionals = () => {
       professionalId: e?.professionalId,
       scheduleDays: e?.scheduleDays,
       scheduleHours: e?.scheduleHours,
-      modality: e?.modality.modality,
-      specialities: e?.specialities.name,
+      modality: e?.modality?.modality,
+      specialities: e?.specialities?.name,
       dni: e?.dni,
       country: e?.country,
       state: e?.state,
@@ -189,8 +138,9 @@ const Professionals = () => {
       deleted: e?.deleted,
       image: e?.image.url
     }
-  })
 
+  })
+  // console.log(rawData);
   return (
     <Box m="20px">
       <Header title="Professionals" subtitle="Managing the Professionals" />
